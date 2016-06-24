@@ -1,7 +1,7 @@
 # AnalogClock
 ![alt text](https://raw.githubusercontent.com/hazlema/AnalogClock/master/ClockControl.png "Customizable Analog Clock Control")
 <br><br>
-Properties yyou can change at Design Time:<br>
+Properties you can change at Design Time:<br>
 
         [Description("Show numbers on the clock"), Category("Clock")]
         public bool ShowNumbers { get; set; } = true;
