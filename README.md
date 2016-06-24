@@ -19,3 +19,5 @@ Properties you can change at Design Time:<br>
 - Inner Border Color
 <br><br>
 Ths control updates during designtime making it easy to customize visualy.
+<br><br>
+Written in the c# with Visualstudio 2015 Community Edition
