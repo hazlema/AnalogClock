@@ -10,13 +10,5 @@ namespace AnalogClock {
         private void timer1_Tick(object sender, EventArgs e) {
             txtTime.Text = DateTime.Now.ToLongTimeString();
         }
-
-        private void label1_Click(object sender, EventArgs e) {
-
-        }
-
-        private void xClock1_Click(object sender, EventArgs e) {
-
-        }
     }
 }

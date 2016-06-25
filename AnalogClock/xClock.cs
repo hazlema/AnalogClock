@@ -73,8 +73,6 @@ namespace Clock {
 
         // Set some things
         private void initComponent() {
-            BorderStyle = BorderStyle.None;
-            BackColor = Color.Transparent;
             Width = ClockSize;
             Height = ClockSize;
             Image = new Bitmap(ClockSize, ClockSize, PixelFormat.Format32bppArgb);
@@ -172,9 +170,10 @@ namespace Clock {
             }
 
             // Draw Hands
-            g.DrawLine(new Pen(HandColor, 3), Center, getCoords(Hour + microHour, 60, (ClockSize / 2) - 70));
-            g.DrawLine(new Pen(HandColor, 2), Center, getCoords(Minute, 60, (ClockSize / 2) - 50));
-            if (ShowSecondHand) g.DrawLine(new Pen(SecondHandColor, 2), Center, getCoords(Sec, 60, (ClockSize / 2) - 50));
+            g.DrawLine(new Pen(HandColor, 3), Center, getCoords(Hour + microHour, 60, (ClockSize / 16) *3));
+            g.DrawLine(new Pen(HandColor, 2), Center, getCoords(Minute, 60, (ClockSize / 16) * 5));
+            if (ShowSecondHand)
+                g.DrawLine(new Pen(SecondHandColor, 2), Center, getCoords(Sec, 60, (ClockSize / 16) * 5));
 
             this.Invalidate();
         }
