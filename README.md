@@ -1,4 +1,5 @@
 # AnalogClock
+![alt text](https://raw.githubusercontent.com/hazlema/AnalogClock/master/ClockControl3.png "Customizable Analog Clock Control")
 <br><br>
 Properties you can change at Design Time:<br>
 
