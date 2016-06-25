@@ -71,6 +71,24 @@ namespace Clock {
         [Description("Inner Border Color"), Category("Clock")]
         public Color InnerBorderColor { get; set; } = Color.Black;
 
+        [Description("Number Font"), Category("Clock")]
+        public Font NumberFont { get; set; } = new Font("Arial", 10);
+
+        [Description("Use custom display times or the current time"), Category("Clock")]
+        public bool isCustomTime { get; set; } = false;
+
+        [Description("Set to a number"), Category("Clock")]
+        public int CustomHour { get; set; } = 0;
+
+        [Description("Set to a number"), Category("Clock")]
+        public int CustomMinute { get; set; } = 0;
+
+        [Description("Set to a number"), Category("Clock")]
+        public int CustomSecond { get; set; } = 0;
+
+        [Description("TimeZone offset in hours (ex. 5)"), Category("Clock")]
+        public int TimeZone { get; set; } = 0;
+
         // Set some things
         private void initComponent() {
             Width = ClockSize;
@@ -82,8 +100,9 @@ namespace Clock {
             timer.Tick += onTick;
         }
 
+
         // Math Fun
-        private Point getCoords(int value, int ticks, int handLength) {
+        private Point findPoint(int value, int ticks, int handLength) {
             int centx = this.Width / 2;
             int centy = this.Height / 2;
 
@@ -102,11 +121,15 @@ namespace Clock {
             }
         }
 
-        private void onTick(object sender, EventArgs e) {
-            int Hour = DateTime.Now.Hour * 5;
-            int microHour = DateTime.Now.Minute / 12;
-            int Minute = DateTime.Now.Minute;
-            int Sec = DateTime.Now.Second;
+        private void drawClock(DateTime Current) {
+            drawClock(Current.Hour, Current.Minute, Current.Second);
+        }
+
+        private void drawClock(int hour, int min, int sec) {
+            int Hour = hour * 5;
+            int microHour = min / 12;
+            int Minute = min;
+            int Sec = sec;
 
             Point Center = new Point(ClockSize / 2, ClockSize / 2);
             Graphics g;
@@ -136,10 +159,10 @@ namespace Clock {
             for (int c = 1; c <= 60; c++) {
                 if (c % 5 == 0) {
                     if (ShowMajorHash)
-                        g.DrawLine(new Pen(MajorHashColor, 1), Center, getCoords(c, 60, (clocksize / 2) - 5));
-                } else { 
+                        g.DrawLine(new Pen(MajorHashColor, 1), Center, findPoint(c, 60, (clocksize / 2) - 5));
+                } else {
                     if (ShowMinorHash)
-                        g.DrawLine(new Pen(MinorHashColor, 1), Center, getCoords(c, 60, (clocksize / 2) - 5));
+                        g.DrawLine(new Pen(MinorHashColor, 1), Center, findPoint(c, 60, (clocksize / 2) - 5));
                 }
             }
 
@@ -147,22 +170,22 @@ namespace Clock {
             g.FillEllipse(new SolidBrush(InnerBorderColor), new Rectangle(15, 15, ClockSize - 30, ClockSize - 30));
 
             // Fill
-            g.FillEllipse(GBrush, new Rectangle(20, 20, ClockSize - 40, ClockSize - 40));
+            g.FillEllipse(GBrush, new Rectangle(18, 18, ClockSize - 36, ClockSize - 36));
 
             // Draw Numbers
-            if (ShowNumbers) { 
-                for(int c = 1; c <= 60; c++) {
+            if (ShowNumbers) {
+                for (int c = 1; c <= 60; c++) {
                     if (c % 5 == 0) {
-                        Point pos = getCoords(c, 60, clocksize / 2 - 35);
+                        Point pos = findPoint(c, 60, clocksize / 2 - 35);
                         StringFormat fmt = new StringFormat();
                         fmt.Alignment = StringAlignment.Center;
                         fmt.LineAlignment = StringAlignment.Center;
 
                         g.DrawString(
                             (c / 5).ToString(),
-                            new Font("Arial", 10),
+                            NumberFont,
                             new SolidBrush(NumbersColor),
-                            new RectangleF(pos.X - 15, pos.Y - 10, 30, 20),
+                            new RectangleF(pos.X - 20, pos.Y - 10, 40, 20),
                             fmt
                         );
                     }
@@ -170,12 +193,19 @@ namespace Clock {
             }
 
             // Draw Hands
-            g.DrawLine(new Pen(HandColor, 3), Center, getCoords(Hour + microHour, 60, (ClockSize / 16) *3));
-            g.DrawLine(new Pen(HandColor, 2), Center, getCoords(Minute, 60, (ClockSize / 16) * 5));
+            g.DrawLine(new Pen(HandColor, 3), Center, findPoint(Hour + microHour, 60, (ClockSize / 16) * 3));
+            g.DrawLine(new Pen(HandColor, 2), Center, findPoint(Minute, 60, (ClockSize / 16) * 5));
             if (ShowSecondHand)
-                g.DrawLine(new Pen(SecondHandColor, 2), Center, getCoords(Sec, 60, (ClockSize / 16) * 5));
+                g.DrawLine(new Pen(SecondHandColor, 2), Center, findPoint(Sec, 60, (ClockSize / 16) * 5));
 
             this.Invalidate();
+        }
+
+        private void onTick(object sender, EventArgs e) {
+            if (isCustomTime)
+                drawClock(CustomHour, CustomMinute, CustomSecond);
+            else
+                drawClock(DateTime.Now.AddHours(TimeZone));
         }
     }
 }
