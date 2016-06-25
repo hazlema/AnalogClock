@@ -17,6 +17,11 @@ Properties you can change at Design Time:<br>
 - Major Hash Color
 - Minor Hash Color
 - Inner Border Color
+- Use custom time or the current system time
+- Set custom hour
+- Set custom minute
+- Set custom seconds
+- TimeZone offset in hours
 <br><br>
 Ths control updates during designtime making it easy to customize visualy and create thousands of styles.
 <br><br>
